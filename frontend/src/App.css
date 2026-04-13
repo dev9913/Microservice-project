@@ -1,0 +1,179 @@
+* {
+  box-sizing: border-box;
+}
+/* ===== Base ===== */
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: linear-gradient(135deg, #ffe4e6, #e0f2fe);
+  color: #0f172a;
+}
+
+/* ===== Layout ===== */
+.app {
+  max-width: 1100px;
+  margin: auto;
+  padding: 30px 20px;
+}
+
+/* ===== Header ===== */
+h1 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+/* ===== Grid ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* ===== Card ===== */
+
+.card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  overflow: hidden; /* 🔥 IMPORTANT */
+}
+
+/* ===== Section Title ===== */
+h2 {
+  margin-bottom: 14px;
+  font-size: 18px;
+}
+
+/* ===== Inputs ===== */
+/* ===== Inputs (Modern Upgrade) ===== */
+input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  font-size: 14px;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Hover effect */
+input:hover {
+  border-color: #c7d2fe;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+}
+
+/* Focus effect (IMPORTANT) */
+input:focus {
+  outline: none;
+  border-color: #60a5fa;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(96,165,250,0.25);
+}
+
+/* Placeholder */
+input::placeholder {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+/* Disabled (future use) */
+input:disabled {
+  background: #f1f5f9;
+  cursor: not-allowed;
+}
+
+
+/* ===== Buttons ===== */
+button {
+  width: 100%;
+  padding: 11px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #fda4af, #60a5fa);
+  color: white;
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+/* ===== Empty State ===== */
+.empty {
+  font-size: 13px;
+  color: #94a3b8;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ===== Success ===== */
+.success {
+  margin-top: 10px;
+  padding: 10px;
+  background: #dcfce7;
+  border-radius: 8px;
+  font-size: 13px;
+  border: 1px solid #bbf7d0;
+}
+
+/* ===== List ===== */
+.list {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ===== Item ===== */
+.item {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  transition: 0.2s;
+}
+
+.item:hover {
+  transform: translateY(-3px);
+  border-color: #c7d2fe;
+}
+
+/* ===== Header ===== */
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ===== Title ===== */
+.item-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* ===== Badge ===== */
+.badge {
+  background: linear-gradient(135deg, #fda4af, #60a5fa);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+}
+
+/* ===== Meta ===== */
+.meta {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #64748b;
+}

@@ -1,0 +1,62 @@
+version: '3.7'
+
+services:
+  user-svc: 
+    container_name: user-service
+    build: ./user-service
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/userdb    
+    networks:
+      - micro-svc
+    depends_on:
+      - mongo
+    restart: always 
+
+  product-svc:
+    container_name: product-service
+    build: ./product-service
+    ports:
+      - "3002:3002"
+    environment:
+       - MONGO_URL=mongodb://mongo:27017/productdb    
+    networks:
+      - micro-svc
+    depends_on:
+      - mongo
+    restart: always
+
+  order-svc:
+    container_name: order-service
+    build: ./order-service
+    ports:
+      - "3003:3003"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/orderdb    
+    networks:
+      - micro-svc
+    depends_on:
+      - product-svc
+    restart: always
+  
+  mongo:
+    container_name: mongo
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    networks:
+      - micro-svc
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+    
+
+volumes:
+  mongo_data:
+
+networks:
+  micro-svc:
+    driver: bridge
+
+
