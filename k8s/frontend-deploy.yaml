@@ -1,0 +1,55 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: frontend
+  namespace: micro-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: dev7878/micro-svc-frontend:1.0.0
+          env:
+            - name: USER_API
+              valueFrom:
+                configMapKeyRef:
+                  name: micro-svc-config
+                  key: USER_API
+            - name: PRODUCT_API
+              valueFrom:
+                configMapKeyRef:
+                  name: micro-svc-config
+                  key: PRODUCT_API
+            - name: ORDER_API
+              valueFrom:
+                configMapKeyRef:
+                  name: micro-svc-config
+                  key: ORDER_API
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "120m"
+              memory: "250Mi"
+            limits:
+              cpu: "240m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10

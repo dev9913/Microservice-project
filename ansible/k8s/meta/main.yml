@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  author: Dev
+  description: Role to install K3s on Ubuntu servers
+  license: MIT
+  min_ansible_version: "2.12"
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - focal    # 20.04
+        - jammy    # 22.04
+
+  galaxy_tags:
+    - k3s
+    - kubernetes
+    - devops
+    - container
+    - cluster
+
+dependencies: []
+

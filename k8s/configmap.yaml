@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: micro-svc-config
+  namespace: micro-svc
+data:
+  # Backend
+  MONGO_USER_URL: "mongodb://mongo:27017/userdb"
+  MONGO_ORDER_URL: "mongodb://mongo:27017/orderdb"
+  MONGO_PRODUCT_URL: "mongodb://mongo:27017/productdb"
+
+  # Internal service URLs
+  USER_API: "http://microsvc.com"
+  PRODUCT_API: "http://microsvc.com"
+  ORDER_API: "http://microsvc.com"
+

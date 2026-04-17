@@ -1,0 +1,35 @@
+kind: AppProject
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: ms-project
+  namespace: argocd
+spec:
+  description: "This Project for MicroService Architecture."
+  sourceRepos:
+    - https://github.com/dev9913/Microservice-project.git
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: micro-svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: autoscaling
+      kind: HorizontalPodAutoscaler
+    - group: ""
+      kind: ConfigMap
+    - group: apps
+      kind: StatefulSet
+    - group: ""
+      kind: Service
+    - group: apps
+      kind: Deployment
+    - group: ""
+      kind: Secret
+    - group: networking.k8s.io
+      kind: Ingress      
+  roles:
+    - name: micro-svc-admin
+      description: "Role for MicroService Project Admin."
+      policies:
+        - p, proj:ms-project:micro-svc-admin, applications, *, ms-project/*, allow

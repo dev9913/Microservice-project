@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL =
-  process.env.REACT_APP_ORDER_API ;
+const API_URL = window._env_.ORDER_API;
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);

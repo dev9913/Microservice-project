@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-svc
+  namespace: micro-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: order-svc
+  ports:
+  - port: 3003 
+    targetPort: 3003
+

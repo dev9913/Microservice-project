@@ -1,0 +1,87 @@
+i---
+
+# update cache 
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+# Download K3s -> /home/ubuntu/k3s.sh
+
+- name: Download k3s 
+  ansible.builtin.get_url:
+    url: https://get.k3s.io
+    dest: "/home/{{ server_user }}/k3s.sh"
+    mode: '0755'
+
+# Run a Shell k3s.sh script to install k3s that download from url
+- name: Run K3s install script
+  ansible.builtin.command: sh "/home/{{ server_user }}/k3s.sh"
+  args:
+    creates: /usr/local/bin/k3s
+  notify: Start service K3s
+
+# Create a .kube directory 
+
+- name: Create a directory for k3s
+  ansible.builtin.file:
+    path: "/home/{{ server_user }}/.kube"
+    state: directory
+    owner: "{{ server_user }}"
+    group: "{{ server_user }}"
+    mode: '0755'
+
+# Give the permission to k3s.yaml file
+- name: Give the permissions to an k3s.yaml file
+  ansible.builtin.file:
+    path: /etc/rancher/k3s/k3s.yaml
+    owner: "{{ server_user }}"
+    group: "{{ server_user }}"
+    mode: '0600'
+
+# Copy k3s.yaml file --> ./kube/config 
+- name: Copy file
+  ansible.builtin.copy:
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: "/home/{{ server_user }}/.kube/config"
+    owner: "{{ server_user }}"
+    group: "{{ server_user }}"
+    mode: '0600'
+    remote_src: yes
+ 
+# Download Kubectl latest Version 
+
+- name: Get latest kubectl version
+  shell: curl -L -s https://dl.k8s.io/release/stable.txt
+  register: kubectl_version
+  changed_when: false
+
+# Install Kubectl 
+
+- name: Install kubectl
+  get_url:
+    url: "https://dl.k8s.io/release/{{ kubectl_version.stdout }}/bin/linux/amd64/kubectl"
+    dest: /usr/local/bin/kubectl
+    mode: '0755'
+
+# Waiting for k3s !! .. !!
+
+- name: Wait for k3s to be ready
+  shell: k3s kubectl get nodes
+  register: k3s_status
+  retries: 10
+  delay: 10
+  until: k3s_status.rc == 0
+
+# Download Helm -> /home/ubuntu/get_helm.sh
+
+- name: Download Helm installer
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    dest: "/home/{{ server_user }}/get_helm.sh"
+    mode: '0700'
+
+- name: Install Helm
+  ansible.builtin.command: "/home/{{ server_user }}/get_helm.sh"
+  args:
+    creates: /usr/local/bin/helm
+      

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL =
-  process.env.REACT_APP_USER_API ;
+const API_URL = window._env_.USER_API;
 
 export default function Users() {
   const [users, setUsers] = useState([]);

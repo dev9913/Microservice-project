@@ -19,5 +19,4 @@ COPY --from=builder /app/build  /usr/share/nginx/html/
 
 EXPOSE 80
 
-CMD ["nginx","-g","daemon off;"]
-
+CMD ["/bin/sh", "-c", "echo \"window._env_ = { USER_API: '$USER_API', PRODUCT_API: '$PRODUCT_API', ORDER_API: '$ORDER_API' };\" > /usr/share/nginx/html/env.js && nginx -g 'daemon off;'"]

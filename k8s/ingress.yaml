@@ -1,0 +1,41 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: micro-svc-ingress
+  namespace: micro-svc
+spec:
+  ingressClassName: traefik
+  rules:
+  - host:  'microsvc.com'
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: frontend-svc
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: "/users"
+        backend:
+          service:
+            name: user-svc
+            port: 
+              number: 3001
+      - pathType: Prefix
+        path: "/products"
+        backend:
+          service:
+            name: product-svc
+            port:
+              number: 3002          
+      - pathType: Prefix
+        path: "/orders"
+        backend:
+          service:
+            name: order-svc
+            port:
+              number: 3003   
+
+     

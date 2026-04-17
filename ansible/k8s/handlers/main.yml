@@ -1,0 +1,8 @@
+---
+ # Start k3s service
+
+- name: Start service K3s
+  ansible.builtin.service:
+    name: k3s
+    state: started
+    enabled: yes

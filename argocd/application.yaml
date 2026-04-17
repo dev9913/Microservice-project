@@ -1,0 +1,23 @@
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: micro-svc
+  namespace: argocd
+spec:
+  project: ms-project
+  source:
+    repoURL: https://github.com/dev9913/Microservice-project.git
+    targetRevision: main
+    path: k8s
+  destination:
+    server:  https://kubernetes.default.svc  # Enter Your  Cluster IP .
+    namespace: micro-svc
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+      
+

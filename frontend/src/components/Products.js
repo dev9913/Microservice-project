@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL =
-  process.env.REACT_APP_PRODUCT_API ;
+const API_URL = window._env_.PRODUCT_API;
 
 export default function Products() {
   const [products, setProducts] = useState([]);
