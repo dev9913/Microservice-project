@@ -84,4 +84,8 @@ i---
   ansible.builtin.command: "/home/{{ server_user }}/get_helm.sh"
   args:
     creates: /usr/local/bin/helm
-      
+
+- name: Install Kubernetes Metrics Server
+  kubernetes.core.k8s:
+    state: present
+    src: https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml    

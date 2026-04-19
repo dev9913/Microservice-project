@@ -12,9 +12,8 @@ pipeline{
     parameters {
         string(name: 'IMAGE_TAG', defaultValue: '3.0.0', description: 'Docker image tag')
     }
-
-    enviroment {
-	BRANCH      = "main"
+    
+    environment {
 	DOCKER_USER = "dev7878"
         GIT_USER    = "dev9913"
 	ARTIFACTS                   = '**/*.log,trivy-*.txt'
@@ -23,6 +22,18 @@ pipeline{
     }
 	
     stages{
+
+        /* ================= VALIDATE INPUT ================= */
+
+        stage('Validate Input') {
+            steps {
+                script {
+                    if (!params.IMAGE_TAG?.trim()) {
+                        error "IMAGE_TAG is required"
+                    }
+                }
+            }
+        }
 
         /* ================= Code Check-Out ================= */
 
@@ -33,14 +44,56 @@ pipeline{
 	      }
 	   }
 	}
-	
+
+        /* ================= LINT ================= */
+        stage('Lint') {
+            steps {
+                script {
+                    parallel failFast: true,
+                        frontend: {
+                            sh 'cd frontend && npm ci && npm run lint'
+                        },
+                        user_svc: {
+                            sh 'cd backend/user-service && npm ci && npm run lint'
+                        },
+                        product_svc: {
+                            sh 'cd backend/product-service && npm ci && npm run lint'
+                        },
+                        order_svc: {
+                            sh 'cd backend/order-service && npm ci && npm run lint'
+                        }
+                }
+            }
+        }	
+        /* ================= TESTING  ================= */
+
+        stage('Testing') {
+ 	   steps {
+    	      script {
+      	          parallel failFast: true,
+                       frontend: {
+    			   sh 'cd frontend && npm ci && npm test || exit 1'
+                       },
+        	       user_svc: {
+          	           sh 'cd backend/user-service && npm ci && npm test || exit 1'
+        	       },
+        	       product_svc: {
+          	       	   sh 'cd backend/product-service && npm ci && npm test || exit 1'
+                       },
+                       order_svc: {
+                            sh 'cd backend/order-service && npm ci && npm test || exit 1'
+                       }
+    	      }
+           }
+        }
+
 	/* ================= DOCKER IMAGE BUILD ================= */
 
 	stage('Code-Build'){
-	   when {expression { BRANCH == 'main ' } }
+           when { branch 'main' }
            steps {
               script {
-		  parallel failfats: true,
+		  parallel failFast: true,
 		      frontend: {				
                  	  code_build(DOCKER_USER,"micro-svc-frontend",params.IMAGE_TAG,"frontend")    
               	      },
@@ -82,7 +135,7 @@ pipeline{
        /* =================  IMAGE PUSH TO DOCKER-HUB ================= */
 
        stage('Image push'){
-	   when { expression { BRANCH == 'main' } }
+	   when { branch 'main' }
            steps {
               script {
                   parallel failFast: true ,
@@ -105,7 +158,7 @@ pipeline{
 	/* ================= UPDATE THE K8S IMAGE ON GIT-HUB   ================= */
 	
 	stage('K8S Deployment Image update'){
-           when { expression { BRANCH == 'main' } }
+           when { branch 'main' }
            steps {
               script {
                   parallel failFast: true ,
@@ -123,13 +176,14 @@ pipeline{
                       },
                       order_svc: {
                           k8s_image_update("order-svc",params.IMAGE_TAG)
-			  k8s_image_push_on_github("Product-svc",GIT_USER,"backend-order-svc",params.IMAGE_TAG)
+			  k8s_image_push_on_github("order-svc",GIT_USER,"backend-order-svc",params.IMAGE_TAG)
                       }
               }
            }
         }
-   
+  
 	/* ================= Ci Pipeline is completed  ================= */
+
  }
 
 

@@ -1,0 +1,7 @@
+crds:
+  install: true
+server:
+  service:
+    type: ClusterIP
+  containerPorts:
+    server: 8080    
