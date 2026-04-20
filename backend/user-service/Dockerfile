@@ -1,5 +1,8 @@
-FROM node:18-alpine
+FROM node:20-alpine
 WORKDIR /app
+
+RUN npm install -g npm@11.12.1
+RUN apk update 
 
 COPY package*.json ./
 
